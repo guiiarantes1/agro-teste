@@ -1,47 +1,82 @@
 import React, { useState, useEffect } from "react";
 
-const ProductsTable = () => {
-  const [products, setProducts] = useState([]);
-  const [newProductName, setNewProductName] = useState("");
-  const [newProductPrice, setNewProductPrice] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+const TabelaProdutos = () => {
+  const [produtos, setProdutos] = useState([]);
+  const [novoNomeProduto, setNovoNomeProduto] = useState("");
+  const [novoPrecoProduto, setNovoPrecoProduto] = useState("");
+  const [msgErro, setMsgErro] = useState("");
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProdutos = async () => {
       try {
-        const response = await fetch("http://localhost:5000/products");
+        const response = await fetch("http://127.0.0.1:8000/api/products/");
         const data = await response.json();
-        setProducts(data);
+        setProdutos(data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
     };
-    fetchProducts();
+    fetchProdutos();
   }, []);
 
-  const handleAddProduct = () => {
-    if (!newProductName || !newProductPrice) {
-      setErrorMessage("Por favor, preencha o nome e o preço do produto.");
+  const adicionarProduto = async () => {
+    if (!novoNomeProduto || !novoPrecoProduto) {
+      setMsgErro("Por favor, preencha o nome e o preço do produto.");
       return;
     }
 
-    const nextId =
-      products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
-
-    const newProduct = {
-      id: nextId,
-      name: newProductName,
-      price: parseFloat(newProductPrice),
+    const novoProduto = {
+      name: novoNomeProduto.charAt(0).toUpperCase() + novoNomeProduto.slice(1),
+      price: parseFloat(novoPrecoProduto),
     };
 
-    setProducts([...products, newProduct]);
-    setNewProductName("");
-    setNewProductPrice("");
-    setErrorMessage("");
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/products/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novoProduto),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao adicionar o produto.");
+      }
+
+      const produtoCriado = await response.json();
+
+      setProdutos((produtoAnterior) => [...produtoAnterior, produtoCriado]);
+      setNovoNomeProduto("");
+      setNovoPrecoProduto("");
+      setMsgErro("");
+    } catch (error) {
+      setMsgErro(error.message);
+    }
   };
 
-  const handleDelete = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
+  const deletarProduto = async (id) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/products/${id}/`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Produto não encontrado.");
+        }
+        throw new Error("Erro ao deletar o produto.");
+      }
+
+      setProdutos((produtoAnterior) =>
+        produtoAnterior.filter((product) => product.id !== id)
+      );
+      setMsgErro("");
+    } catch (error) {
+      setMsgErro(error.message);
+    }
   };
 
   return (
@@ -50,51 +85,49 @@ const ProductsTable = () => {
 
       {/* Formulário para adicionar novos produtos */}
       <div
-        style={{ marginBottom: "25px", display: "flex", alignItems: "center" }}
+        style={{ marginBottom: "25px", display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <input
           type="text"
           placeholder="Nome do Produto"
-          value={newProductName}
-          onChange={(e) => setNewProductName(e.target.value)}
+          value={novoNomeProduto}
+          onChange={(e) => setNovoNomeProduto(e.target.value)}
           style={{ marginRight: "10px", height: "40px" }}
         />
         <input
           type="number"
           placeholder="Preço do Produto"
-          value={newProductPrice}
-          onChange={(e) => setNewProductPrice(e.target.value)}
+          value={novoPrecoProduto}
+          onChange={(e) => setNovoPrecoProduto(e.target.value)}
           style={{ marginRight: "10px", height: "40px" }}
         />
-        <button onClick={handleAddProduct} style={{ backgroundColor: "green" }}>
+        <button onClick={adicionarProduto} style={{ backgroundColor: "green" }}>
           Adicionar Produto
         </button>
       </div>
 
       {/* Exibe a mensagem de erro, se houver */}
-      {errorMessage && (
-        <div style={{ color: "red", marginBottom: "20px" }}>{errorMessage}</div>
+      {msgErro && (
+        <div style={{ color: "red", marginBottom: "20px" }}>{msgErro}</div>
       )}
 
       {/* Tabela de produtos */}
       <table border="1" style={{ width: "100%" }}>
         <thead>
           <tr style={{ padding: "10px" }}>
-            <th>ID</th>
             <th>Nome</th>
             <th>Preço</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {produtos.map((product) => (
             <tr key={product.id}>
-              <td>{product.id}</td>
               <td>{product.name}</td>
-              <td>R$ {product.price.toFixed(2)}</td>
+              <td>R$ {product.price}</td>
               <td>
                 <button
-                  onClick={() => handleDelete(product.id)}
+                  onClick={() => deletarProduto(product.id)}
                   style={{ backgroundColor: "green" }}
                 >
                   Excluir
@@ -108,4 +141,4 @@ const ProductsTable = () => {
   );
 };
 
-export default ProductsTable;
+export default TabelaProdutos;
