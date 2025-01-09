@@ -43,27 +43,37 @@ const TabelaProdutos = () => {
       setMsgErro("Por favor, preencha o nome e o preço do produto.");
       return;
     }
-
+  
     const novoProduto = {
       name: novoNomeProduto.charAt(0).toUpperCase() + novoNomeProduto.slice(1),
       price: parseFloat(novoPrecoProduto),
     };
-
+  
     try {
+      const token = localStorage.getItem("accessToken");
+  
+      if (!token) {
+        throw new Error("Você precisa estar autenticado para adicionar um produto.");
+      }
+  
       const response = await fetch("http://127.0.0.1:8000/api/products/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",     
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(novoProduto),
       });
-
+  
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Token inválido ou expirado. Por favor, faça login novamente.");
+        }
         throw new Error("Erro ao adicionar o produto.");
       }
-
+  
       const produtoCriado = await response.json();
-
+  
       setProdutos((produtoAnterior) => [...produtoAnterior, produtoCriado]);
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
@@ -72,13 +82,24 @@ const TabelaProdutos = () => {
       setMsgErro(error.message);
     }
   };
+  
 
   const deletarProduto = async (id) => {
     try {
+      const token = localStorage.getItem("accessToken");
+  
+      if (!token) {
+        throw new Error("Você precisa estar autenticado para adicionar um produto.");
+      }
+      
       const response = await fetch(
         `http://127.0.0.1:8000/api/products/${id}/`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          }
         }
       );
 
