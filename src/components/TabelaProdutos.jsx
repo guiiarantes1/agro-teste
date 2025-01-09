@@ -1,23 +1,42 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const TabelaProdutos = () => {
   const [produtos, setProdutos] = useState([]);
   const [novoNomeProduto, setNovoNomeProduto] = useState("");
   const [novoPrecoProduto, setNovoPrecoProduto] = useState("");
   const [msgErro, setMsgErro] = useState("");
+  const navigate = useNavigate();
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const fetchProdutos = async () => {
+      if (!token) {
+        navigate("/login?redirect=true");
+        return null;
+      }
+
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/products/");
+        const response = await fetch("http://127.0.0.1:8000/api/products/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          navigate("/login");
+          return;
+        }
+
         const data = await response.json();
         setProdutos(data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
       }
     };
+
     fetchProdutos();
-  }, []);
+  }, [token, history]);
 
   const adicionarProduto = async () => {
     if (!novoNomeProduto || !novoPrecoProduto) {
@@ -34,7 +53,7 @@ const TabelaProdutos = () => {
       const response = await fetch("http://127.0.0.1:8000/api/products/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json",     
         },
         body: JSON.stringify(novoProduto),
       });
