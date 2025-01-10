@@ -67,13 +67,13 @@ const Login = () => {
         <h2>LOGIN</h2>
 
         <form onSubmit={logar}>
-          <div class="mb-4">
-            <label for="inputUsuario" class="form-label">
+          <div className="mb-4">
+            <label htmlFor="inputUsuario" className="form-label">
               Usuário
             </label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="inputUsuario"
               value={username}
               placeholder="Digite seu usuário"
@@ -81,22 +81,22 @@ const Login = () => {
               required
             />
           </div>
-          <div class="mb-4">
-            <label for="inputSenha" class="form-label">
+          <div className="mb-4">
+            <label htmlFor="inputSenha" className="form-label">
               Senha
             </label>
             <input
               placeholder="Digite sua senha"
               type="password"
-              class="form-control"
+              className="form-control"
               id="inputSenha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <div class="mb-4">
-            <button type="submit" class="btn btn-primary">
+          <div className="mb-4">
+            <button type="submit" className="btn btn-primary">
               Entrar
             </button>
           </div>
