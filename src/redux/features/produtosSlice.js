@@ -19,8 +19,24 @@ const produtosSlice = createSlice({
     produtos: [],
     loading: false,
     error: null,
+    ordem: { tipo: "nome", direcao: "asc" }, // Ordenação padrão por nome (asc)
   },
-  reducers: {},
+  reducers: {
+    ordenarProdutos: (state, action) => {
+      const { tipo, direcao } = action.payload;
+      state.produtos = [...state.produtos].sort((a, b) => {
+        if (tipo === "nome") {
+          return direcao === "asc"
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        } else if (tipo === "preco") {
+          return direcao === "asc" ? a.price - b.price : b.price - a.price;
+        }
+        return 0;
+      });
+      state.ordem = { tipo, direcao }; // Salva a ordem aplicada
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProdutos.pending, (state) => {
@@ -36,5 +52,7 @@ const produtosSlice = createSlice({
       });
   },
 });
+
+export const { ordenarProdutos } = produtosSlice.actions;
 
 export default produtosSlice.reducer;

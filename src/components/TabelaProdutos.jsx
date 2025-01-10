@@ -11,6 +11,7 @@ const TabelaProdutos = () => {
   const [novoPrecoProduto, setNovoPrecoProduto] = useState("");
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [toast, setToast] = useState({ visible: false, message: "", type: "" });
+  const [ordenacao, setOrdenacao] = useState({ campo: "", ordem: "" });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,10 +22,18 @@ const TabelaProdutos = () => {
 
   const indexUltimoProduto = paginaAtual * 15;
   const indexPrimeiroProduto = indexUltimoProduto - 15;
-  const produtosNaPagina = produtos.slice(
-    indexPrimeiroProduto,
-    indexUltimoProduto
-  );
+  const produtosNaPagina = produtos
+    .slice(indexPrimeiroProduto, indexUltimoProduto)
+    .sort((a, b) => {
+      if (ordenacao.campo === "nome") {
+        return ordenacao.ordem === "asc"
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      } else if (ordenacao.campo === "preco") {
+        return ordenacao.ordem === "asc" ? a.price - b.price : b.price - a.price;
+      }
+      return 0;
+    });
 
   const showToast = (message, type) => {
     setToast({ visible: true, message, type });
@@ -41,10 +50,7 @@ const TabelaProdutos = () => {
     try {
       dispatch(fetchProdutos(token));
     } catch (error) {
-      showToast(
-        "Erro ao buscar produtos. Tente novamente mais tarde.",
-        "danger"
-      );
+      showToast("Erro ao buscar produtos. Tente novamente mais tarde.", "danger");
     }
   };
 
@@ -64,15 +70,11 @@ const TabelaProdutos = () => {
     };
 
     try {
-      const produtoCriado = await apiService.post(
-        "/products/",
-        token,
-        novoProduto
-      );
+      const produtoCriado = await apiService.post("/products/", token, novoProduto);
       showToast("Produto adicionado com sucesso!", "success");
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
-      dispatch(fetchProdutos(token));      
+      dispatch(fetchProdutos(token));
     } catch (error) {
       showToast(error.message, "danger");
     }
@@ -94,14 +96,21 @@ const TabelaProdutos = () => {
     }
   };
 
+  const ordenarProdutos = (campo, ordem) => {
+    if (campo === ordenacao.campo && ordem === ordenacao.ordem) {
+      setOrdenacao({ campo: "id", ordem: "asc" });
+    } else {
+      setOrdenacao({ campo, ordem });
+    }
+  };
+  
+
   const renderTabela = () => (
     <table
       className="table table-success table-striped mx-auto text-center"
       style={{ borderRadius: "7px", overflow: "hidden" }}
     >
-      <thead
-        style={{ fontSize: "20px", fontWeight: "600", lineHeight: "25px" }}
-      >
+      <thead style={{ fontSize: "20px", fontWeight: "600", lineHeight: "25px" }}>
         <tr>
           <th>Nome</th>
           <th>Preço</th>
@@ -132,50 +141,92 @@ const TabelaProdutos = () => {
     </table>
   );
 
-  const renderPaginacao = () => (
-    <nav className="paginacao">
-      <ul className="pagination justify-content-center">
-        <li className={`page-item ${paginaAtual === 1 ? "disabled" : ""}`}>
-          <button
-            className="page-link bg-gray-100 text-black border-0"
-            style={{ borderRadius: "7px 0px 0px 7px" }}
-            onClick={() => mudarPagina(paginaAtual - 1)}
-            aria-label="Anterior"
+  const renderPaginacao = () => {
+    const defRangePaginas = () => {
+      const paginasVisiveis = 5;
+      const inicio = Math.max(paginaAtual - Math.floor(paginasVisiveis / 2), 1);
+      const fim = Math.min(inicio + paginasVisiveis - 1, totalPaginas);
+      return [inicio, fim];
+    };
+  
+    const [inicio, fim] = defRangePaginas();
+  
+    return (
+      <nav className="paginacao">
+        <ul className="pagination justify-content-center">
+          {/* Botão "inicio" */}
+        <li
+            className={`page-item ${paginaAtual === 1 ? "disabled" : ""}`}
           >
-            &laquo;
-          </button>
-        </li>
-        {[...Array(totalPaginas).keys()].map((_, index) => (
+            <button
+              className="page-link bg-gray-100 text-black border-0"
+              style={{ borderRadius: "7px 0px 0px 7px" }}
+              onClick={() => mudarPagina(inicio)}
+              aria-label="Próximo"
+            >
+              Primeira
+            </button>
+          </li>
+          {/* Botão "Anterior" */}
+          <li className={`page-item ${paginaAtual === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link bg-gray-100 text-black border-0"
+              style={{ borderRadius: "0px" }}
+              onClick={() => mudarPagina(paginaAtual - 1)}
+              aria-label="Anterior"
+            >
+              &laquo;
+            </button>
+          </li>
+  
+          {/* Exibe as páginas dentro do intervalo */}
+          {[...Array(fim - inicio + 1).keys()].map((_, index) => (
+            <li
+              key={inicio + index}
+              className={`page-item ${paginaAtual === inicio + index ? "active" : ""}`}
+            >
+              <button
+                className="page-link bg-gray-100 text-black border-0"
+                style={{ borderRadius: "0px" }}
+                onClick={() => mudarPagina(inicio + index)}
+              >
+                {inicio + index}
+              </button>
+            </li>
+          ))}
+  
+          {/* Botão "Próximo" */}
           <li
-            key={index + 1}
-            className={`page-item ${paginaAtual === index + 1 ? "active" : ""}`}
+            className={`page-item ${paginaAtual === totalPaginas ? "disabled" : ""}`}
           >
             <button
               className="page-link bg-gray-100 text-black border-0"
               style={{ borderRadius: "0px" }}
-              onClick={() => mudarPagina(index + 1)}
+              onClick={() => mudarPagina(paginaAtual + 1)}
+              aria-label="Próximo"
             >
-              {index + 1}
+              &raquo;
             </button>
           </li>
-        ))}
-        <li
-          className={`page-item ${
-            paginaAtual === totalPaginas ? "disabled" : ""
-          }`}
-        >
-          <button
-            className="page-link bg-gray-100 text-black border-0"
-            style={{ borderRadius: "0px 7px 7px 0px" }}
-            onClick={() => mudarPagina(paginaAtual + 1)}
-            aria-label="Próximo"
+  
+          {/* Botão "ultimo" */}
+          <li
+            className={`page-item ${paginaAtual === totalPaginas ? "disabled" : ""}`}
           >
-            &raquo;
-          </button>
-        </li>
-      </ul>
-    </nav>
-  );
+            <button
+              className="page-link bg-gray-100 text-black border-0"
+              style={{ borderRadius: "0px 7px 7px 0px" }}
+              onClick={() => mudarPagina(totalPaginas)}
+              aria-label="Próximo"
+            >
+              Última
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
+  
 
   return (
     <div className="main">
@@ -196,13 +247,10 @@ const TabelaProdutos = () => {
             adicionarProduto();
           }}
         >
-          <p
-            className="mb-5 me-3 md-3"
-            style={{ fontSize: "20px", fontWeight: "500" }}
-          >
+          <p className="mb-3 me-3 md-3" style={{ fontSize: "20px", fontWeight: "500" }}>
             Adicionar Produto:
           </p>
-          <div className="mb-5 me-3 md-3">
+          <div className="mb-3 me-3 md-3">
             <input
               type="text"
               className="form-control"
@@ -211,7 +259,7 @@ const TabelaProdutos = () => {
               onChange={(e) => setNovoNomeProduto(e.target.value)}
             />
           </div>
-          <div className="mb-5 me-3 md-3">
+          <div className="mb-3 me-3 md-3">
             <input
               type="tel"
               pattern="[0-9.]*"
@@ -227,10 +275,64 @@ const TabelaProdutos = () => {
               }}
             />
           </div>
-          <button type="submit" className="btn btn-primary mb-5 me-3 md-3">
+          <button type="submit" className="btn btn-primary mb-3 me-3 md-3">
             Adicionar
           </button>
         </form>
+
+        <div className="dropdown d-flex">
+          <button
+            className="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            id="btnDropdown"
+          >
+            Ordenar por
+          </button>
+          <ul className="dropdown-menu dropdown-menu-end">
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => ordenarProdutos("nome", "asc")}
+              >
+                A<i class="bi bi-arrow-right-short"></i>Z
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"/></li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => ordenarProdutos("nome", "desc")}
+              >
+                Z<i class="bi bi-arrow-right-short"></i>A
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"/></li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => ordenarProdutos("preco", "asc")}
+              >
+                Preço<i class="bi bi-arrow-up-short"></i>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"/></li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => ordenarProdutos("preco", "desc")}
+              >
+                Preço<i class="bi bi-arrow-down-short"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+
         {renderTabela()}
         {renderPaginacao()}
       </div>
