@@ -1,72 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProdutos } from "../redux/features/produtosSlice";
 import "../styles/TabelaProdutos.css";
 import Toast from "./shared/Toast";
 import apiService from "../services/apiService";
 
 const TabelaProdutos = () => {
-  const [produtos, setProdutos] = useState([]);
   const [novoNomeProduto, setNovoNomeProduto] = useState("");
   const [novoPrecoProduto, setNovoPrecoProduto] = useState("");
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [toast, setToast] = useState({ visible: false, message: "", type: "" });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refresh_token");
-  const produtosPorPagina = 15;
+  const produtos = useSelector((state) => state.produtos.produtos);
+  const totalPaginas = Math.ceil(produtos.length / 15);
 
-  const indexUltimoProduto = paginaAtual * produtosPorPagina;
-  const indexPrimeiroProduto = indexUltimoProduto - produtosPorPagina;
+  const indexUltimoProduto = paginaAtual * 15;
+  const indexPrimeiroProduto = indexUltimoProduto - 15;
   const produtosNaPagina = produtos.slice(
     indexPrimeiroProduto,
     indexUltimoProduto
   );
-  const totalPaginas = Math.ceil(produtos.length / produtosPorPagina);
 
-  // Exibe o Toast
   const showToast = (message, type) => {
     setToast({ visible: true, message, type });
   };
 
   const hideToast = () => setToast({ ...toast, visible: false });
 
-  const fetchProdutos = async () => {
+  const fetchProdutosData = async () => {
     if (!token) {
       navigate("/login?redirect=true");
       return;
     }
 
     try {
-      const produtosData = await apiService.get("/products/", token);
-      setProdutos(produtosData);
+      dispatch(fetchProdutos(token));
     } catch (error) {
-      if (error.message.includes("401") && refreshToken) {
-        try {
-          const { access: newToken } = await apiService.refreshAccessToken(
-            refreshToken
-          );
-          localStorage.setItem("access_token", newToken);
-          const produtosData = await apiService.get("/products/", newToken);
-          setProdutos(produtosData);
-        } catch (refreshError) {
-          navigate("/login");
-        }
-      } else {
-        console.error("Erro ao buscar produtos:", error);
-        showToast(
-          "Erro ao buscar produtos. Tente novamente mais tarde.",
-          "danger"
-        );
-      }
+      showToast(
+        "Erro ao buscar produtos. Tente novamente mais tarde.",
+        "danger"
+      );
     }
   };
 
   useEffect(() => {
-    fetchProdutos();
-  }, [token, refreshToken, navigate]);
+    fetchProdutosData();
+  }, [token, refreshToken, navigate, dispatch]);
 
-  // Adiciona um novo produto
   const adicionarProduto = async () => {
     if (!novoNomeProduto || !novoPrecoProduto) {
       showToast("Preencha o nome e preço do produto.", "danger");
@@ -84,21 +69,20 @@ const TabelaProdutos = () => {
         token,
         novoProduto
       );
-      setProdutos((prev) => [...prev, produtoCriado]);
+      showToast("Produto adicionado com sucesso!", "success");
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
-      showToast("Produto adicionado com sucesso!", "success");
+      dispatch(fetchProdutos(token));      
     } catch (error) {
       showToast(error.message, "danger");
     }
   };
 
-  // Remove um produto
   const deletarProduto = async (id) => {
     try {
       await apiService.delete(`/products/${id}/`, token);
-      setProdutos((prev) => prev.filter((produto) => produto.id !== id));
       showToast("Produto deletado com sucesso!", "success");
+      dispatch(fetchProdutos(token));
     } catch (error) {
       showToast(error.message, "danger");
     }
@@ -132,8 +116,6 @@ const TabelaProdutos = () => {
               {new Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
               }).format(produto.price)}
             </td>
             <td>
