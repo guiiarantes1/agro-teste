@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/TabelaProdutos.css";
 import Toast from "./shared/Toast";
+import apiService from "../services/apiService";
 
 const TabelaProdutos = () => {
   const [produtos, setProdutos] = useState([]);
@@ -12,6 +13,7 @@ const TabelaProdutos = () => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refresh_token");
   const produtosPorPagina = 15;
 
   const indexUltimoProduto = paginaAtual * produtosPorPagina;
@@ -29,66 +31,60 @@ const TabelaProdutos = () => {
 
   const hideToast = () => setToast({ ...toast, visible: false });
 
-  // Busca produtos ao carregar o componente
-  useEffect(() => {
-    const fetchProdutos = async () => {
-      if (!token) {
-        navigate("/login?redirect=true");
-        return;
-      }
+  const fetchProdutos = async () => {
+    if (!token) {
+      navigate("/login?redirect=true");
+      return;
+    }
 
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/products/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) {
+    try {
+      const produtosData = await apiService.get("/products/", token);
+      setProdutos(produtosData);
+    } catch (error) {
+      if (error.message.includes("401") && refreshToken) {
+        try {
+          const { access: newToken } = await apiService.refreshAccessToken(
+            refreshToken
+          );
+          localStorage.setItem("access_token", newToken);
+          const produtosData = await apiService.get("/products/", newToken);
+          setProdutos(produtosData);
+        } catch (refreshError) {
           navigate("/login");
-          return;
         }
-
-        const data = await response.json();
-        setProdutos(data);
-      } catch (error) {
+      } else {
         console.error("Erro ao buscar produtos:", error);
+        showToast(
+          "Erro ao buscar produtos. Tente novamente mais tarde.",
+          "danger"
+        );
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchProdutos();
-  }, [token, navigate]);
+  }, [token, refreshToken, navigate]);
 
   // Adiciona um novo produto
   const adicionarProduto = async () => {
     if (!novoNomeProduto || !novoPrecoProduto) {
-      showToast("Por favor, preencha o nome e o preço do produto.", "danger");
+      showToast("Preencha o nome e preço do produto.", "danger");
       return;
     }
 
     const novoProduto = {
-      name: novoNomeProduto.charAt(0).toUpperCase() + novoNomeProduto.slice(1),
+      name: novoNomeProduto.trim(),
       price: parseFloat(novoPrecoProduto),
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/products/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(novoProduto),
-      });
-
-      if (!response.ok) {
-        const errorMessage =
-          response.status === 401
-            ? "Token inválido ou expirado. Por favor, faça login novamente."
-            : "Erro ao adicionar o produto.";
-        throw new Error(errorMessage);
-      }
-
-      const produtoCriado = await response.json();
-      setProdutos((prevProdutos) => [...prevProdutos, produtoCriado]);
+      const produtoCriado = await apiService.post(
+        "/products/",
+        token,
+        novoProduto
+      );
+      setProdutos((prev) => [...prev, produtoCriado]);
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
       showToast("Produto adicionado com sucesso!", "success");
@@ -100,28 +96,8 @@ const TabelaProdutos = () => {
   // Remove um produto
   const deletarProduto = async (id) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/products/${id}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorMessage =
-          response.status === 404
-            ? "Produto não encontrado."
-            : "Erro ao deletar o produto.";
-        throw new Error(errorMessage);
-      }
-
-      setProdutos((prevProdutos) =>
-        prevProdutos.filter((produto) => produto.id !== id)
-      );
+      await apiService.delete(`/products/${id}/`, token);
+      setProdutos((prev) => prev.filter((produto) => produto.id !== id));
       showToast("Produto deletado com sucesso!", "success");
     } catch (error) {
       showToast(error.message, "danger");
