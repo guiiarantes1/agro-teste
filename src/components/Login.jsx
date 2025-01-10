@@ -67,10 +67,13 @@ const Login = () => {
         <h2>LOGIN</h2>
 
         <form onSubmit={logar}>
-          <div className="mb-4">
-            <label htmlFor="inputUsuario" className="form-label">
-              Usuário
-            </label>
+          <label htmlFor="inputUsuario" className="form-label">
+            Usuário
+          </label>
+          <div className="mb-4 input-group">
+            <span class="input-group-text" id="basic-addon1">
+            <i class="bi bi-person"></i>
+            </span>
             <input
               type="text"
               className="form-control"
@@ -81,10 +84,15 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="inputSenha" className="form-label">
-              Senha
-            </label>
+
+          <label htmlFor="inputSenha" className="form-label">
+            Senha
+          </label>
+
+          <div className="mb-4 input-group">
+            <span class="input-group-text" id="basic-addon1">
+            <i class="bi bi-lock"></i>
+            </span>
             <input
               placeholder="Digite sua senha"
               type="password"
@@ -95,8 +103,8 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <button type="submit" className="btn btn-primary">
+          <div className="mb-4 d-flex">
+            <button type="submit" className="btn btn-primary" id="btnEntrar" style={{ margin: "0 0 0 auto" }}>
               Entrar
             </button>
           </div>

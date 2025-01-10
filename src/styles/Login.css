@@ -80,7 +80,7 @@ body {
   justify-content: flex-end;
 }
 
-.mb-4 .btn {
+.mb-4 #btnEntrar {
   background-color: var(--color-accent);
   font-weight: 600;
   font-size: var(--font-size-base);
@@ -88,10 +88,12 @@ body {
   padding: 10px 30px;
   align-self: center;
   transition: transform 0.2s ease-in-out;
+  background-color: #f7941f !important;
 }
 
-.mb-4 .btn:hover {
+.mb-4 #btnEntrar:hover {
   transform: scale(1.05);
+  background-color: #f7941f !important;
 }
 
 @media (min-width: 1920px) {
