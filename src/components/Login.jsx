@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "../styles/Login.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [msgErro, setMsgErro] = useState("");
   const [msgRedirecionamento, setmsgRedirecionamento] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ const Login = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("redirect") === "true") {
-      setmsgRedirecionamento("Você precisa estar logado para acessar esta página.");
+      setmsgRedirecionamento("Faça login para acessar esta página.");
     }
   }, [location.search]);
 
@@ -42,43 +44,80 @@ const Login = () => {
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
 
+      setMsgErro("");
       navigate("/tabela");
-
     } catch (err) {
-      setError(err.message);
+      setMsgErro(err.message);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="container">
+      <div className="imagem">
+        <h2>
+          <span style={{ color: "#F7941F" }}>B</span>em-vindo
+        </h2>
+        <img className="agroImg" src="public\agro.png" alt="" />
+      </div>
 
-      <form onSubmit={logar}>
-        <div>
-          <label htmlFor="username">Usuário:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Senha:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+      <div className="login">
+        <h2 className="bemvindo" style={{ opacity: "0" }}>
+          <span style={{ color: "#F7941F" }}>B</span>em-vindo
+        </h2>
+        <h2>LOGIN</h2>
 
-      {msgRedirecionamento && <div style={{ color: "red" }}>{msgRedirecionamento}</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>}
+        <form onSubmit={logar}>
+          <div class="mb-4">
+            <label for="inputUsuario" class="form-label">
+              Usuário
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputUsuario"
+              value={username}
+              placeholder="Digite seu usuário"
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="inputSenha" class="form-label">
+              Senha
+            </label>
+            <input
+              placeholder="Digite sua senha"
+              type="password"
+              class="form-control"
+              id="inputSenha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <button type="submit" class="btn btn-primary">
+              Entrar
+            </button>
+          </div>
+        </form>
+
+        {msgErro && (
+          <div
+            style={{ color: "#d14334", textAlign: "center", fontWeight: "600" }}
+          >
+            {msgErro}
+          </div>
+        )}
+
+        {msgRedirecionamento && (
+          <div
+            style={{ color: "#d14334", textAlign: "center", fontWeight: "600" }}
+          >
+            {msgRedirecionamento}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
