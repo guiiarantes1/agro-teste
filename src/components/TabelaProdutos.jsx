@@ -161,7 +161,7 @@ const TabelaProdutos = () => {
             <button
               className="page-link bg-gray-100 text-black border-0"
               style={{ borderRadius: "7px 0px 0px 7px" }}
-              onClick={() => mudarPagina(inicio)}
+              onClick={() => mudarPagina(1)}
               aria-label="Próximo"
             >
               Primeira
