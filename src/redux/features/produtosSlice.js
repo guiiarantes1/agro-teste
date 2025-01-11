@@ -19,7 +19,7 @@ const produtosSlice = createSlice({
     produtos: [],
     loading: false,
     error: null,
-    ordem: { tipo: "nome", direcao: "asc" }, // Ordenação padrão por nome (asc)
+    ordem: { tipo: "nome", direcao: "asc" },
   },
   reducers: {
     ordenarProdutos: (state, action) => {
@@ -34,7 +34,7 @@ const produtosSlice = createSlice({
         }
         return 0;
       });
-      state.ordem = { tipo, direcao }; // Salva a ordem aplicada
+      state.ordem = { tipo, direcao };
     },
   },
   extraReducers: (builder) => {

@@ -297,37 +297,37 @@ const TabelaProdutos = () => {
                 href="#"
                 onClick={() => ordenarProdutos("nome", "asc")}
               >
-                A<i class="bi bi-arrow-right-short"></i>Z
+                A<i className="bi bi-arrow-right-short"></i>Z
               </a>
             </li>
-            <li><hr class="dropdown-divider"/></li>
+            <li><hr className="dropdown-divider"/></li>
             <li>
               <a
                 className="dropdown-item"
                 href="#"
                 onClick={() => ordenarProdutos("nome", "desc")}
               >
-                Z<i class="bi bi-arrow-right-short"></i>A
+                Z<i className="bi bi-arrow-right-short"></i>A
               </a>
             </li>
-            <li><hr class="dropdown-divider"/></li>
+            <li><hr className="dropdown-divider"/></li>
             <li>
               <a
                 className="dropdown-item"
                 href="#"
                 onClick={() => ordenarProdutos("preco", "asc")}
               >
-                Preço<i class="bi bi-arrow-up-short"></i>
+                Preço<i className="bi bi-arrow-up-short"></i>
               </a>
             </li>
-            <li><hr class="dropdown-divider"/></li>
+            <li><hr className="dropdown-divider"/></li>
             <li>
               <a
                 className="dropdown-item"
                 href="#"
                 onClick={() => ordenarProdutos("preco", "desc")}
               >
-                Preço<i class="bi bi-arrow-down-short"></i>
+                Preço<i className="bi bi-arrow-down-short"></i>
               </a>
             </li>
           </ul>

@@ -71,8 +71,8 @@ const Login = () => {
             Usuário
           </label>
           <div className="mb-4 input-group">
-            <span class="input-group-text" id="basic-addon1">
-            <i class="bi bi-person"></i>
+            <span className="input-group-text" id="basic-addon1">
+            <i className="bi bi-person"></i>
             </span>
             <input
               type="text"
@@ -90,8 +90,8 @@ const Login = () => {
           </label>
 
           <div className="mb-4 input-group">
-            <span class="input-group-text" id="basic-addon1">
-            <i class="bi bi-lock"></i>
+            <span className="input-group-text" id="basic-addon1">
+            <i className="bi bi-lock"></i>
             </span>
             <input
               placeholder="Digite sua senha"
