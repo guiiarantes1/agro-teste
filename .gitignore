@@ -7,10 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Ignorar node_modules e .vite
+node_modules/
+.vite/
 
 # Editor directories and files
 .vscode/*
