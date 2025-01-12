@@ -89,8 +89,9 @@ body {
 }
 
 .table {
-  width: 70% !important;
-  margin: 5px 0 !important;
+  width: 70% !important;  
+  margin-bottom: 15px !important;
+  height: fit-content !important;
 }
 
 .row-item:nth-child(odd) {
@@ -124,10 +125,7 @@ body {
     flex-direction: column;
   }
 
-  .table,
-  .list {
-    height: 55vh !important;
-  }
+
 }
 
 @media screen and (max-width: 768px) {
