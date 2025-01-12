@@ -19,7 +19,8 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
     "react-toastify": "^11.0.2",
-    "react-window": "^1.8.11"
+    "react-window": "^1.8.11",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -49,6 +50,7 @@
     "moduleNameMapper": {
       "\\.(css|scss|sass|less)$": "identity-obj-proxy"
     },
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFiles": ["<rootDir>/jest.setup.js"]
   }
 }

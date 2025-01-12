@@ -5,7 +5,7 @@ import { fetchProdutos } from "../redux/features/produtosSlice";
 import "../styles/TabelaProdutos.css";
 import Toast from "./shared/Toast";
 import apiService from "../services/apiService";
-import { FixedSizeList as List } from "react-window";
+import ListaProdutos from "./ListaProdutos";
 
 const TabelaProdutos = () => {
   const [novoNomeProduto, setNovoNomeProduto] = useState("");
@@ -57,9 +57,16 @@ const TabelaProdutos = () => {
     };
 
     try {
-      const produtoCriado = await apiService.post("/products/", token, novoProduto);
+      const produtoCriado = await apiService.post(
+        "/products/",
+        token,
+        novoProduto
+      );
       //gera um numero aleatorio e salva no localStorage para o get nao utilizar o cache
-      localStorage.setItem("productsVersion", Math.random().toString().slice(2));
+      localStorage.setItem(
+        "productsVersion",
+        Math.random().toString().slice(2)
+      );
       showToast("Produto adicionado com sucesso!", "success");
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
@@ -103,84 +110,6 @@ const TabelaProdutos = () => {
     return 0;
   });
 
-  const renderTabela = () => {
-    const Row = ({ index, style }) => {
-      const produto = produtosOrdenados[index];   
-  
-      return (
-        <div
-          style={{
-            ...style,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "10px 30px",
-            borderBottom: "1px solid #ccc",
-          }}
-          key={produto.id}
-          className="row-item"
-        >
-          <span>{produto.name}</span>
-          <span style={{ marginRight: "7px" }}>
-            {new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(produto.price)}
-          </span>
-          <button
-            className="btn btn-primary"
-            onClick={() => deletarProduto(produto.id)}
-            style={{ marginRight: "6px" }}
-          >
-            <i className="bi bi-trash3"></i>
-          </button>
-        </div>
-      );
-    };
-  
-    return (
-      <div 
-      className="table"
-        style={{
-          borderRadius: "7px",
-          border: "1px solid #ccc",
-          overflow: "hidden",
-          width: "70%",
-          margin: "0 auto",
-          textAlign: "center",  
-          height: height,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "20px",
-            fontWeight: "600",
-            lineHeight: "25px",
-            backgroundColor: "#028f76",
-            padding: "10px 30px",
-            color: "#fff",
-          }}
-          className="header"
-        >
-          <span>Nome</span>
-          <span>Preço</span>
-          <span>Ações</span>
-        </div>
-        <List
-          height={height}
-          itemCount={produtosOrdenados.length}
-          itemSize={60}
-          width={"100%"}    
-          className="list"
-        >
-          {Row}
-        </List>
-      </div>
-    );
-  };
-
   return (
     <div className="main">
       <div className="body">
@@ -211,7 +140,7 @@ const TabelaProdutos = () => {
               type="text"
               className="form-control"
               placeholder="Nome do produto"
-              value={novoNomeProduto}
+              value={novoNomeProduto}             
               onChange={(e) => setNovoNomeProduto(e.target.value)}
             />
           </div>
@@ -294,8 +223,11 @@ const TabelaProdutos = () => {
             </li>
           </ul>
         </div>
-
-        {renderTabela()}
+        <ListaProdutos
+          produtos={produtosOrdenados}
+          deletarProduto={deletarProduto}
+          height={height}
+        />
       </div>
     </div>
   );
