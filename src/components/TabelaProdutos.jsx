@@ -71,6 +71,8 @@ const TabelaProdutos = () => {
 
     try {
       const produtoCriado = await apiService.post("/products/", token, novoProduto);
+      //gera um numero aleatorio e salva no localStorage para o get nao utilizar o cache
+      localStorage.setItem("productsVersion", Math.random().toString().slice(2));
       showToast("Produto adicionado com sucesso!", "success");
       setNovoNomeProduto("");
       setNovoPrecoProduto("");
@@ -82,6 +84,8 @@ const TabelaProdutos = () => {
 
   const deletarProduto = async (id) => {
     try {
+      //gera um numero aleatorio e salva no localStorage para o get nao utilizar o cache
+      localStorage.setItem("productsVersion", Math.random().toString().slice(2));
       await apiService.delete(`/products/${id}/`, token);
       showToast("Produto deletado com sucesso!", "success");
       dispatch(fetchProdutos(token));

@@ -5,7 +5,9 @@ export const fetchProdutos = createAsyncThunk(
   "produtos/fetchProdutos",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await apiService.get("/products/", token);
+      //pega o numero aleatorio salvo no localStorage, se for igual ao salvo no localStorage, nao utiliza o cache
+      const version = localStorage.getItem("productsVersion");
+      const response = await apiService.get(`/products/?v=${version}`, token);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
