@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1736718035114" clover="3.2.0">
+  <project timestamp="1736718035114" name="All files">
+    <metrics statements="142" coveredstatements="95" conditionals="46" coveredconditionals="16" methods="36" coveredmethods="26" elements="224" coveredelements="137" complexity="0" loc="142" ncloc="142" packages="5" files="6" classes="6"/>
+    <package name="components">
+      <metrics statements="71" coveredstatements="58" conditionals="20" coveredconditionals="9" methods="20" coveredmethods="14"/>
+      <file name="ListaProdutos.jsx" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\components\ListaProdutos.jsx">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="18" type="stmt"/>
+        <line num="6" count="29" type="stmt"/>
+        <line num="7" count="29" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="39" count="18" type="stmt"/>
+      </file>
+      <file name="TabelaProdutos.jsx" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\components\TabelaProdutos.jsx">
+        <metrics statements="65" coveredstatements="52" conditionals="20" coveredconditionals="9" methods="17" coveredmethods="11"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="19" type="stmt"/>
+        <line num="12" count="18" type="stmt"/>
+        <line num="13" count="18" type="stmt"/>
+        <line num="14" count="18" type="stmt"/>
+        <line num="15" count="18" type="stmt"/>
+        <line num="16" count="18" type="stmt"/>
+        <line num="17" count="18" type="stmt"/>
+        <line num="18" count="18" type="stmt"/>
+        <line num="19" count="18" type="stmt"/>
+        <line num="20" count="39" type="stmt"/>
+        <line num="22" count="18" type="stmt"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="26" count="18" type="stmt"/>
+        <line num="28" count="18" type="stmt"/>
+        <line num="29" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="6" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="44" count="18" type="stmt"/>
+        <line num="45" count="7" type="stmt"/>
+        <line num="48" count="18" type="stmt"/>
+        <line num="49" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="79" count="18" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="94" count="18" type="stmt"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="102" count="18" type="stmt"/>
+        <line num="103" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="107" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="110" count="13" type="stmt"/>
+        <line num="113" count="18" type="stmt"/>
+        <line num="128" count="2" type="stmt"/>
+        <line num="129" count="2" type="stmt"/>
+        <line num="144" count="1" type="stmt"/>
+        <line num="155" count="1" type="stmt"/>
+        <line num="156" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="159" count="1" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="195" count="0" type="stmt"/>
+        <line num="207" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.shared">
+      <metrics statements="7" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="3"/>
+      <file name="Toast.jsx" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\components\shared\Toast.jsx">
+        <metrics statements="7" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="3"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="18" type="stmt"/>
+        <line num="6" count="18" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="14" count="18" type="stmt"/>
+      </file>
+    </package>
+    <package name="redux.features">
+      <metrics statements="22" coveredstatements="14" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="5"/>
+      <file name="produtosSlice.js" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\redux\features\produtosSlice.js">
+        <metrics statements="22" coveredstatements="14" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="5"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="10" count="8" type="stmt"/>
+        <line num="11" count="7" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="8" type="stmt"/>
+        <line num="48" count="7" type="stmt"/>
+        <line num="49" count="7" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="redux.store">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="store.js" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\redux\store\store.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="40" coveredstatements="15" conditionals="14" coveredconditionals="3" methods="4" coveredmethods="3"/>
+      <file name="apiService.js" path="C:\Users\Guilherme Arantes\Documents\AgroTeste\desafio-agro\src\services\apiService.js">
+        <metrics statements="40" coveredstatements="15" conditionals="14" coveredconditionals="3" methods="4" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="10" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="39" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="65" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

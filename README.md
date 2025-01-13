@@ -1,8 +1,85 @@
-# React + Vite
+# README - AGRO-TESTE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Gerenciamento de Produtos - Interface Frontend
 
-Currently, two official plugins are available:
+Interface frontend desenvolvida em React que consome a API de gerenciamento de produtos (api-agro-teste).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologias Utilizadas
+
+- React 18+
+- Redux Toolkit
+- React Testing Library
+- Bootstrap para estilização responsiva
+- React-Window para virtualização de listas
+
+
+
+## Instalação
+
+### Instalando o Node.js
+
+Baixe e instale o Node.js no [site oficial](https://nodejs.org/). Verifique a versão após a instalação:
+
+```bash
+node --version
+npm --version
+```
+
+### Passos para configurar o Frontend
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/guiiarantes1/agro-teste.git
+   cd agro-teste
+   ```
+
+2. Instale as dependências: (Todas inclusas no package.json)
+
+   ```bash
+   npm install
+   ```
+
+3. Inicie o servidor de desenvolvimento:
+
+   ```bash
+   npm run dev
+   ```
+
+## Documentação da API Consumida
+
+[Documentação da api](https://github.com/guiiarantes1/api-agro-teste)
+
+### Retorna todos os produtos
+
+```http
+GET /api/products/
+```
+
+| Parâmetro   | Tipo     | Descrição                                   |
+| :---------- | :------- | :------------------------------------------ |
+| `Authorization` | `string` | **Obrigatório**. Token JWT no formato `Bearer {token}` |
+
+## Exemplos de Uso
+
+```javascript
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+function ProductList() {
+ const produtos = useSelector((state) => state.produtos.produtos);
+
+  return (
+    <ul>
+      {produtos.map((product) => (
+        <li key={produto.id}>{produto.name} - ${produto.price}</li>
+      ))}
+    </ul>
+  );
+}
+
+export default ProductList;
+```
+
+
+
